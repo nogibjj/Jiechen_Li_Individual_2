@@ -1,3 +1,5 @@
+[![Rust CI/CD](https://github.com/nogibjj/Jiechen_Li_Individual_2/actions/workflows/cicd.yml/badge.svg)](https://github.com/nogibjj/Jiechen_Li_Individual_2/actions/workflows/cicd.yml)
+
 # Jiechen_Li_Individual_2
 
 ## Purpose
