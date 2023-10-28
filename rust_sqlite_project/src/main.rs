@@ -1,8 +1,8 @@
 // fn main() {
 //     println!("Hello, world!");
 // }
-
-use rust_sqlite_project::{extract, query, transform_load}; 
+extern crate rust_sqlite_project; 
+use rust_sqlite_project::{setup_db, insert_track, query_tracks, update_track_bpm, delete_track};
 use std::env;
 
 fn main() {
@@ -14,32 +14,55 @@ fn main() {
 
     let action = &args[1];
     match action.as_str() {
-        "extract" => {
-            extract(
-                "https://your_dataset_url_here.csv",
-                "spotify_2023_1.csv",
-                "data",
-            );
+        "setup" => {
+            if let Err(err) = setup_db() {
+                eprintln!("Error: {:?}", err);
+            }
         }
-        "transform_load" => match transform_load("spotify_2023_1.csv") {
-            Ok(_) => println!("Data loaded successfully!"),
-            Err(err) => eprintln!("Error: {:?}", err),
-        },
-        "query" => {
-            if let Some(q) = args.get(2) {
-                if let Err(err) = query(q) {
+        "insert" => {
+            if args.len() >= 6 {
+                let artist_name = &args[2];
+                let spotify: i32 = args[3].parse().unwrap_or(0);
+                let apple: i32 = args[4].parse().unwrap_or(0);
+                let bpm: i32 = args[5].parse().unwrap_or(0);
+                
+                if let Err(err) = insert_track(artist_name, spotify, apple, bpm) {
                     eprintln!("Error: {:?}", err);
-                } else {
-                    println!("Query executed successfully!");
                 }
             } else {
-                println!("Usage: {} query [SQL query]", args[0]);
+                println!("Usage: {} insert [artist_name] [spotify] [apple] [bpm]", args[0]);
+            }
+        }
+        "query" => {
+            if let Err(err) = query_tracks() {
+                eprintln!("Error: {:?}", err);
+            }
+        }
+        "update" => {
+            if args.len() >= 4 {
+                let artist_name = &args[2];
+                let new_bpm: i32 = args[3].parse().unwrap_or(0);
+                
+                if let Err(err) = update_track_bpm(artist_name, new_bpm) {
+                    eprintln!("Error: {:?}", err);
+                }
+            } else {
+                println!("Usage: {} update [artist_name] [new_bpm]", args[0]);
+            }
+        }
+        "delete" => {
+            if args.len() >= 3 {
+                let artist_name = &args[2];
+                
+                if let Err(err) = delete_track(artist_name) {
+                    eprintln!("Error: {:?}", err);
+                }
+            } else {
+                println!("Usage: {} delete [artist_name]", args[0]);
             }
         }
         _ => {
-            println!("Invalid action. Use 'extract', 'transform_load', or 'query'.");
+            println!("Invalid action. Use 'setup', 'insert', 'query', 'update', or 'delete'.");
         }
     }
 }
-
-
