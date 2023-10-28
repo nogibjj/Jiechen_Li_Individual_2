@@ -50,7 +50,8 @@ pub fn insert_track(artist_name: &str, spotify: i32, apple: i32, bpm: i32) -> Re
 
 pub fn query_tracks() -> Result<()> {
     let conn = Connection::open("spotify_2023_1_new_test.db")?;
-    let mut stmt = conn.prepare("SELECT artist_name, in_spotify_playlists, in_apple_playlists, bpm FROM tracks")?;
+    let mut stmt = conn
+        .prepare("SELECT artist_name, in_spotify_playlists, in_apple_playlists, bpm FROM tracks")?;
     let tracks = stmt.query_map([], |row| {
         Ok((
             row.get::<usize, String>(0)?,
@@ -81,21 +82,24 @@ pub fn update_track_bpm(artist_name: &str, new_bpm: i32) -> Result<()> {
         params![new_bpm, artist_name],
     )?;
 
-    log_query(
-        &format!(
-            "UPDATE tracks SET bpm = {} WHERE artist_name = '{}';",
-            new_bpm, artist_name
-        )
-    );
+    log_query(&format!(
+        "UPDATE tracks SET bpm = {} WHERE artist_name = '{}';",
+        new_bpm, artist_name
+    ));
 
     Ok(())
 }
 
 pub fn delete_track(artist_name: &str) -> Result<()> {
     let conn = Connection::open("spotify_2023_1_new_test.db")?;
-    conn.execute("DELETE FROM tracks WHERE artist_name = ?", params![artist_name])?;
-    log_query(&format!("DELETE FROM tracks WHERE artist_name = '{}';", artist_name));
+    conn.execute(
+        "DELETE FROM tracks WHERE artist_name = ?",
+        params![artist_name],
+    )?;
+    log_query(&format!(
+        "DELETE FROM tracks WHERE artist_name = '{}';",
+        artist_name
+    ));
 
     Ok(())
 }
-
