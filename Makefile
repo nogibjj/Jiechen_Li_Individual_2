@@ -1,71 +1,37 @@
-# Display Rust command-line utility versions
-rust-version:
-	@echo "Rust command-line utility versions:"
-	rustc --version              # Rust compiler
-	cargo --version              # Rust package manager
-	rustfmt --version            # Rust code formatter
-	rustup --version             # Rust toolchain manager
-	clippy-driver --version      # Rust linter
+# Targets
+.PHONY: all build test format lint clean run setup insert query update delete
 
-# Format code using rustfmt
+all: build test format lint clean run setup insert query update delete
+
+build:
+	cd rust_sqlite_project && cargo build
+
+#test:
+	#cd rust_sqlite_project && cargo test --quiet
+
 format:
-	#cargo fmt --quiet
-	cd rust_sqlite_project && cargo fmt --quiet
+	cd rust_sqlite_project && cargo fmt
 
-
-# Run clippy for linting
 lint:
-	#cargo clippy --quiet
 	cd rust_sqlite_project && cargo clippy --quiet
 
-# Run tests
-test:
-	#cargo test --quiet
-	cd rust_sqlite_project && cargo test --quiet
-# Build and run the project
+clean:
+	cd rust_sqlite_project && cargo clean
+
 run:
-	#cargo run
 	cd rust_sqlite_project && cargo run
-# Build release version
-release:
-	#cargo build --release
-	cd rust_sqlite_project && cargo build --release
-# Install Rust toolchain if needed
-install:
-	# Install if needed
-	# @echo "Updating rust toolchain"
-	# rustup update stable
-	# rustup default stable 
 
-# Run all formatting, linting, and testing tasks
-all: format lint test run
+setup:
+	cd rust_sqlite_project && cargo run setup
 
-# Custom tasks
+insert:
+	cd rust_sqlite_project && cargo run insert "Test Artist" 10 5 120
 
-# Create a database entry
-create:
-	#cargo run insert "Artist Test" 10 5 120
-	cd rust_sqlite_project && cargo run insert "Artist Test" 10 5 120
-# Read from the database
-read:
-	#cargo run query
+query:
 	cd rust_sqlite_project && cargo run query
-# Update a database entry
+
 update:
-	#cargo run update "Artist Test" 130
-	cd rust_sqlite_project && cargo run update "Artist Test" 130
-# Delete a database entry
+	cd rust_sqlite_project && cargo run update "Test Artist" 130
+
 delete:
-	#cargo run delete "Artist Test"
-	cd rust_sqlite_project && cargo run delete "Artist Test"
-# Generate and push changes to GitHub
-generate_and_push:
-	@if [ -n "$$(git status --porcelain)" ]; then \
-		git config --local user.email "action@github.com"; \
-		git config --local user.name "GitHub Action"; \
-		git add .; \
-		git commit -m "Add query log"; \
-		git push; \
-	else \
-		echo "No changes to commit. Skipping commit and push."; \
-	fi
+	cd rust_sqlite_project && cargo run delete "Test Artist"

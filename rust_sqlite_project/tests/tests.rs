@@ -28,7 +28,10 @@ fn test_setup_db() -> Result<()> {
 #[test]
 fn test_insert_track() -> Result<()> {
     if db_exists() {
-        std::fs::remove_file(DB_FILE).expect("Failed to remove test database");
+        match std::fs::remove_file(DB_FILE) {
+            Ok(_) => {}
+            Err(e) => eprintln!("Failed to remove test database: {:?}", e),
+        }
     }
 
     setup_db()?;
