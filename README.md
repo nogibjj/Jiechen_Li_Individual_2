@@ -79,7 +79,7 @@ cargo test -- --test-threads=1
 
 ## Demo Video
 
-Please click <a href="https://youtu.be/fIlqYSDHRA8" target="_blank">here</a> to watch the explanatory Demo Video of this repo.
+Please click <a href="https://youtu.be/hwThYM_8fk0" target="_blank">here</a> to watch the explanatory Demo Video of this repo.
 
 ## References
 
