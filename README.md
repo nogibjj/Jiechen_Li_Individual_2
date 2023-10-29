@@ -33,15 +33,16 @@ source $HOME/.cargo/env
 3. Create a Rust project
 
 ```bash
-cargo new rust_sqlite_project
+cargo new rust_sqlite_project  # rust_sqlite_project is my project name
 ```
 
 ## Add SQLite Dependency
 
 1. Use ``rusqlite`` crate in Rust
 
-```bash
-cargo new rust_sqlite_project
+```toml
+[dependencies]
+rusqlite = "0.29.0"    # check for the latest version on crates.io
 ```
 
 2. Then build it
